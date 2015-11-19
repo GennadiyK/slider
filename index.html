@@ -5,24 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link rel="stylesheet" href="css/style.css"/>
-    <script src="lib/dist/jquery.min.js"></script>
+    <script src="lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
 <div class="slider-b">
-    <a href="" class="btn" data-btn="prev">prev</a>
-    <a href="" class="btn" data-btn="next">next</a>
-    <div class="slider-wrap">
-        <ul class="slider">
-            <li class="slider-item current"><img src="" alt="1"></li>
-            <li class="slider-item"><img src="" alt="2"></li>
-            <li class="slider-item"><img src="" alt="3"></li>
-            <li class="slider-item"><img src="" alt="4"></li>
-            <li class="slider-item"><img src="" alt="5"></li>
-            <li class="slider-item"><img src="" alt="6"></li>
-        </ul>
+    <!--<a href="" class="btn" data-slider="btnPrev">prev</a>-->
+    <!--<a href="" class="btn" data-slider="btnNext">next</a>-->
+    <!--<div class="slider-wrap">-->
+        <!--<ul class="slider" data-slider="slider">-->
+            <!--<li class="slider-item current" data-slider="item"><img src="" alt="1"></li>-->
+            <!--<li class="slider-item" data-slider="item"><img src="" alt="2"></li>-->
+            <!--<li class="slider-item" data-slider="item"><img src="" alt="3"></li>-->
+            <!--<li class="slider-item" data-slider="item"><img src="" alt="4"></li>-->
+            <!--<li class="slider-item" data-slider="item"><img src="" alt="5"></li>-->
+            <!--<li class="slider-item" data-slider="item"><img src="" alt="6"></li>-->
+        <!--</ul>-->
     </div>
 </div>
 <script src="js/rotator.js"></script>
+<script>
+    var slider = new Slider({
+        elem: $('.slider-b'),
+        items: [
+            'hello',
+            'world'
+        ]
+    });
 
+    slider.getElem();
+</script>
 </body>
 </html>
