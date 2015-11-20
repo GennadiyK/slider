@@ -1,10 +1,10 @@
-.slider-wrap {
+.slider {
     margin: 0 auto;
     width: 800px;
     overflow: hidden;
 }
 
-.slider {
+.slider-list {
     list-style-type:none;
     margin: 0;
     padding: 0;
@@ -12,7 +12,7 @@
     transition-duration: 1s;
 }
 
-.slider:after {
+.slider-list:after {
     content:'.';
     display:block;
     clear:both;
@@ -20,7 +20,7 @@
     overflow: hidden;
 }
 
-.slider-item {
+.slider-list-item {
     float: left;
     width: 255px;
     height: 195px;
@@ -30,11 +30,11 @@
     transition-duration: 2s;
 }
 
-.slider-item.current {
+.slider-list-item.current {
     border-color: red;
 }
 
-.slider-item img {
+.slider-list-item img {
     width: 100%;
     height: 100%;
 }
