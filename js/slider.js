@@ -9,15 +9,16 @@
 
     function Slider(options) {
         var elem = options.elem;
-        var slider,sliderList,li,img,imgSrc;
+        var slider,
+            sliderList,
+            currentSlide,
+            li,
+            img,
+            imgSrc,
+            mrg;
 
+        currentSlide = 0;
 
-        //var slider = elem.find('[data-slider="slider"]');
-        //var sliderItem = elem.find('[data-slider="item"]');
-        //var sliderItemWidth = sliderItem.outerWidth(true);
-        //var currentSlide = 0;
-        //var mrg = 0;
-        //slider.width(sliderItemWidth * sliderItem.length);
 
         function getElem(){
             if(!slider) render();
@@ -29,6 +30,7 @@
             slider = document.createElement('div');
             slider.className = 'slider';
             renderItems();
+            renderControl();
         };
 
 
@@ -38,7 +40,7 @@
             imgSrc = options.imgSrc || [];
 
 
-            imgSrc.forEach(function(item,i){
+            imgSrc.forEach(function(item){
                 li = document.createElement('li');
                 li.className = 'slider-list-item';
                 img = document.createElement('img');
@@ -48,17 +50,28 @@
 
             });
 
-
-
             $(slider).append(sliderList);
-
             $(elem).append(slider);
+
             fixedSliderWidth('.slider-list-item','.slider-list');
         };
 
 
         function renderControl() {
+            var prev = document.createElement('a');
+            var next = document.createElement('a');
 
+            prev.setAttribute('class','slider-control');
+            next.setAttribute('class','slider-control');
+            prev.setAttribute('data-control','prev');
+            next.setAttribute('data-control','next');
+            prev.setAttribute('href','#');
+            next.setAttribute('href','#');
+
+            prev.innerHTML = 'prev';
+            next.innerHTML = 'next';
+
+            $(elem).append(prev,next);
         };
 
         function fixedSliderWidth(item, container) {
@@ -71,61 +84,60 @@
         };
 
 
-        //elem.on('click', function (e) {
-        //    prevNext(e);
-        //    toggleClass();
-        //});
-        //
-        //function prevNext(e) {
-        //    e.preventDefault();
-        //
-        //    var eventElem = e.target;
-        //
-        //    if (!$(eventElem).data("slider")) return;
-        //
-        //    if ($(eventElem).data("slider") == 'btnNext') {
-        //        next();
-        //
-        //    } else if ($(eventElem).data("slider") == 'btnPrev') {
-        //        prev();
-        //
-        //    }
-        //
-        //};
-        //
-        //function next() {
-        //    if (currentSlide < sliderItem.length - 3) {
-        //        currentSlide++;
-        //
-        //        mrg += sliderItemWidth;
-        //        slider.css({
-        //            'margin-left': '-' + mrg + 'px'
-        //        });
-        //
-        //    } else {
-        //        currentSlide = 0;
-        //        mrg = 0;
-        //        slider.css({
-        //            'margin-left': mrg + 'px'
-        //        });
-        //    }
-        //};
-        //
-        //function prev() {
-        //    if (currentSlide != 0) {
-        //        currentSlide--;
-        //        mrg -= sliderItemWidth;
-        //        slider.css({
-        //            'margin-left': '-' + mrg + 'px'
-        //        });
-        //    } else {
-        //        currentSlide = sliderItem.length - 3;
-        //        mrg = slider.width() - (sliderItemWidth * currentSlide);
-        //        slider.css({
-        //            'margin-left': '-' + mrg + 'px'
-        //        });
-        //    }
-        //};
+        elem.on('click', function (e) {
+            prevNext(e);
+            //toggleClass();
+        });
+
+        function prevNext(e) {
+            e.preventDefault();
+
+            var eventElem = e.target;
+
+            if (!$(eventElem).data("control")) return;
+
+            if ($(eventElem).data("control") == 'next') {
+                next();
+
+            } else if ($(eventElem).data("control") == 'prev') {
+                prev();
+            }
+
+        };
+
+        function next() {
+            if (currentSlide < li.length - 3) {
+                currentSlide++;
+
+                mrg += sliderItemWidth;
+                slider.css({
+                    'margin-left': '-' + mrg + 'px'
+                });
+
+            } else {
+                currentSlide = 0;
+                mrg = 0;
+                slider.css({
+                    'margin-left': mrg + 'px'
+                });
+            }
+        };
+
+        function prev() {
+            if (currentSlide != 0) {
+                currentSlide--;
+                mrg -= sliderItemWidth;
+                slider.css({
+                    'margin-left': '-' + mrg + 'px'
+                });
+            } else {
+                currentSlide = sliderItem.length - 3;
+                mrg = slider.width() - (sliderItemWidth * currentSlide);
+                slider.css({
+                    'margin-left': '-' + mrg + 'px'
+                });
+            }
+        };
 
         //function toggleClass() {
         //    slider.find('.current').removeClass('current');
