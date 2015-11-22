@@ -14,33 +14,33 @@
             currentSlide,
             li,
             img,
-            imgSrc,
+            imgCollection,
             mrg;
 
         currentSlide = 0;
-
+        mrg = 0;
 
         function getElem(){
             if(!slider) render();
             return slider;
 
-        };
+        }
 
         function render(){
             slider = document.createElement('div');
             slider.className = 'slider';
             renderItems();
             renderControl();
-        };
+        }
 
 
         function renderItems(){
             sliderList = document.createElement('ul');
             sliderList.className = 'slider-list';
-            imgSrc = options.imgSrc || [];
+            imgCollection = options.imgCollection || [];
 
 
-            imgSrc.forEach(function(item){
+            imgCollection.forEach(function(item){
                 li = document.createElement('li');
                 li.className = 'slider-list-item';
                 img = document.createElement('img');
@@ -52,9 +52,10 @@
 
             $(slider).append(sliderList);
             $(elem).append(slider);
+            $('.slider-list-item:first-child').addClass('current');
 
             fixedSliderWidth('.slider-list-item','.slider-list');
-        };
+        }
 
 
         function renderControl() {
@@ -72,7 +73,7 @@
             next.innerHTML = 'next';
 
             $(elem).append(prev,next);
-        };
+        }
 
         function fixedSliderWidth(item, container) {
             var itemElem = $(item);
@@ -81,12 +82,12 @@
             var containerElemWidth = itemElemWidth * itemElem.length;
 
             containerElem.width(containerElemWidth);
-        };
+        }
 
 
         elem.on('click', function (e) {
             prevNext(e);
-            //toggleClass();
+            toggleClass('.slider-list','.slider-list-item','current');
         });
 
         function prevNext(e) {
@@ -98,50 +99,50 @@
 
             if ($(eventElem).data("control") == 'next') {
                 next();
-
             } else if ($(eventElem).data("control") == 'prev') {
                 prev();
             }
 
-        };
+        }
 
         function next() {
-            if (currentSlide < li.length - 3) {
+            if (currentSlide < imgCollection.length - 3) {
                 currentSlide++;
+                mrg += $(li).outerWidth(true);
 
-                mrg += sliderItemWidth;
-                slider.css({
+                $(sliderList).css({
                     'margin-left': '-' + mrg + 'px'
                 });
 
             } else {
                 currentSlide = 0;
                 mrg = 0;
-                slider.css({
+                $(sliderList).css({
                     'margin-left': mrg + 'px'
                 });
             }
-        };
+        }
 
         function prev() {
             if (currentSlide != 0) {
                 currentSlide--;
-                mrg -= sliderItemWidth;
-                slider.css({
+                mrg -= $(li).outerWidth(true);
+                $(sliderList).css({
                     'margin-left': '-' + mrg + 'px'
                 });
             } else {
-                currentSlide = sliderItem.length - 3;
-                mrg = slider.width() - (sliderItemWidth * currentSlide);
-                slider.css({
+                currentSlide = imgCollection.length - 3;
+                mrg = $(sliderList).width() - ($(li).outerWidth(true) * currentSlide);
+                $(sliderList).css({
                     'margin-left': '-' + mrg + 'px'
                 });
             }
-        };
+        }
 
-        //function toggleClass() {
-        //    slider.find('.current').removeClass('current');
-        //    sliderItem.eq(currentSlide).addClass('current');
-        //}
+        function toggleClass(parent,item,className) {
+            $(parent).find('.'+className).removeClass(className);
+            $(item).eq(currentSlide).addClass(className);
+        }
+
         this.getElem = getElem;
     }
