@@ -1,12 +1,3 @@
-//1.correct width of ul check width of slider item
-//2.create control rendering for slider
-//3.animate slider
-//4.get data for slider from JSON
-//5.create property - show / hide slider control
-//6. create property for visible count items of slider
-//7.create thumbs
-
-
     function Slider(options) {
         var elem = options.elem;
         var slider,
@@ -20,12 +11,13 @@
         currentSlide = 0;
         mrg = 0;
 
+        //final render of slider
         function getElem(){
             if(!slider) render();
             return slider;
-
         }
 
+        //rendering slider-list(ul)
         function render(){
             slider = document.createElement('div');
             slider.className = 'slider';
@@ -33,6 +25,11 @@
             renderControl();
         }
 
+        /*creating ul.slider-list
+         creating  li.slider-list-item,
+         append all into the elem,
+         add current class for firs li,
+         correct slider width - fixedSliderWidth()*/
 
         function renderItems(){
             sliderList = document.createElement('ul');
@@ -57,7 +54,7 @@
             fixedSliderWidth('.slider-list-item','.slider-list');
         }
 
-
+        //creating control for slider
         function renderControl() {
             var prev = document.createElement('a');
             var next = document.createElement('a');
@@ -75,6 +72,7 @@
             $(elem).append(prev,next);
         }
 
+        //correcting full width of slider
         function fixedSliderWidth(item, container) {
             var itemElem = $(item);
             var containerElem = $(container);
@@ -84,12 +82,13 @@
             containerElem.width(containerElemWidth);
         }
 
-
+        //delegation click event on control buttons and apply prevNext() function
         elem.on('click', function (e) {
             prevNext(e);
             toggleClass('.slider-list','.slider-list-item','current');
         });
 
+        //checking event.target and if click was on prev button - run prev(); if click was on next - run next()
         function prevNext(e) {
             e.preventDefault();
 
@@ -105,6 +104,7 @@
 
         }
 
+        //move ul with margin-left
         function next() {
             if (currentSlide < imgCollection.length - 3) {
                 currentSlide++;
@@ -123,6 +123,7 @@
             }
         }
 
+        //move ul with margin-left
         function prev() {
             if (currentSlide != 0) {
                 currentSlide--;
@@ -139,10 +140,12 @@
             }
         }
 
+        //changing class on li element with currentSlide element index
         function toggleClass(parent,item,className) {
             $(parent).find('.'+className).removeClass(className);
             $(item).eq(currentSlide).addClass(className);
         }
 
+        //initialize getElem method
         this.getElem = getElem;
     }
