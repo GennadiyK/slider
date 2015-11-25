@@ -1,29 +1,29 @@
     function Slider(options) {
-        var elem = options.elem;
-        var slider,
-            sliderList,
-            currentSlide,
-            li,
-            img,
-            imgCollection,
-            mrg;
+        this.elem = options.elem;
+        this.imgCollection = options.imgCollection || [];
 
-        currentSlide = 0;
-        mrg = 0;
-
+        this._slider = null;
+        this._sliderList = null;
+        this._currentSlide = 0;
+        this._li = null;
+        this._img = null;
+        this._mrg = 0;
+    }
         //final render of slider
-        function getElem(){
-            if(!slider) render();
-            return slider;
-        }
+    Slider.prototype.getElem = function(){
+        if(!this._slider) this.render();
+        return this._slider;
+
+    };
 
         //rendering slider-list(ul)
-        function render(){
-            slider = document.createElement('div');
-            slider.className = 'slider';
-            renderItems();
-            renderControl();
-        }
+    Slider.prototype.render = function(){
+        this._slider = document.createElement('div');
+        this._slider.className = 'slider';
+        this.renderItems();
+        this.renderControl();
+        this.clickOnElement();
+    };
 
         /*creating ul.slider-list
          creating  li.slider-list-item,
@@ -31,121 +31,122 @@
          add current class for firs li,
          correct slider width - fixedSliderWidth()*/
 
-        function renderItems(){
-            sliderList = document.createElement('ul');
-            sliderList.className = 'slider-list';
-            imgCollection = options.imgCollection || [];
+    Slider.prototype.renderItems = function(){
+        this._sliderList = document.createElement('ul');
+        this._sliderList.className = 'slider-list';
 
+        console.log(this);
+        this.imgCollection.forEach(function(item){
+            this._li = document.createElement('li');
+            this._li.className = 'slider-list-item';
+            this._img = document.createElement('img');
+            this._img.src = item;
+            $(this._li).append(this._img);
+            $(this._sliderList).append(this._li);
 
-            imgCollection.forEach(function(item){
-                li = document.createElement('li');
-                li.className = 'slider-list-item';
-                img = document.createElement('img');
-                img.src = item;
-                $(li).append(img);
-                $(sliderList).append(li);
-
-            });
-
-            $(slider).append(sliderList);
-            $(elem).append(slider);
-            $('.slider-list-item:first-child').addClass('current');
-
-            fixedSliderWidth('.slider-list-item','.slider-list');
-        }
-
-        //creating control for slider
-        function renderControl() {
-            var prev = document.createElement('a');
-            var next = document.createElement('a');
-
-            prev.setAttribute('class','slider-control');
-            next.setAttribute('class','slider-control');
-            prev.setAttribute('data-control','prev');
-            next.setAttribute('data-control','next');
-            prev.setAttribute('href','#');
-            next.setAttribute('href','#');
-
-            prev.innerHTML = 'prev';
-            next.innerHTML = 'next';
-
-            $(elem).append(prev,next);
-        }
-
-        //correcting full width of slider
-        function fixedSliderWidth(item, container) {
-            var itemElem = $(item);
-            var containerElem = $(container);
-            var itemElemWidth = $(item).outerWidth(true);
-            var containerElemWidth = itemElemWidth * itemElem.length;
-
-            containerElem.width(containerElemWidth);
-        }
-
-        //delegation click event on control buttons and apply prevNext() function
-        elem.on('click', function (e) {
-            prevNext(e);
-            toggleClass('.slider-list','.slider-list-item','current');
         });
 
+        $(this._slider).append(this._sliderList);
+        $(this.elem).append(this._slider);
+        $('.slider-list-item:first-child').addClass('current');
+
+        this.fixedSliderWidth('.slider-list-item','.slider-list');
+    };
+
+        //creating control for slider
+    Slider.prototype.renderControl = function() {
+        var prev = document.createElement('a');
+        var next = document.createElement('a');
+
+        prev.setAttribute('class','slider-control');
+        next.setAttribute('class','slider-control');
+        prev.setAttribute('data-control','prev');
+        next.setAttribute('data-control','next');
+        prev.setAttribute('href','#');
+        next.setAttribute('href','#');
+
+        prev.innerHTML = 'prev';
+        next.innerHTML = 'next';
+
+        $(this.elem).append(prev,next);
+    };
+
+        //correcting full width of slider
+    Slider.prototype.fixedSliderWidth = function (item, container) {
+        var itemElem = $(item);
+        var containerElem = $(container);
+        var itemElemWidth = $(item).outerWidth(true);
+        var containerElemWidth = itemElemWidth * itemElem.length;
+
+        containerElem.width(containerElemWidth);
+    };
+
+        //delegation click event on control buttons and apply prevNext() function
+    Slider.prototype.clickOnElement = function() {
+        this.elem.on('click', function (e) {
+            this.prevNext(e);
+            this.toggleClass('.slider-list','.slider-list-item','current');
+        });
+    }
+
+
         //checking event.target and if click was on prev button - run prev(); if click was on next - run next()
-        function prevNext(e) {
-            e.preventDefault();
+    Slider.prototype.prevNext= function (e) {
+        e.preventDefault();
 
-            var eventElem = e.target;
+        var eventElem = e.target;
 
-            if (!$(eventElem).data("control")) return;
+        if (!$(eventElem).data("control")) return;
 
-            if ($(eventElem).data("control") == 'next') {
-                next();
-            } else if ($(eventElem).data("control") == 'prev') {
-                prev();
-            }
-
+        if ($(eventElem).data("control") == 'next') {
+            this.next();
+        } else if ($(eventElem).data("control") == 'prev') {
+            this.prev();
         }
+
+    };
 
         //move ul with margin-left
-        function next() {
-            if (currentSlide < imgCollection.length - 3) {
-                currentSlide++;
-                mrg += $(li).outerWidth(true);
+    Slider.prototype.next = function() {
+        if (this._currentSlide < this._imgCollection.length - 3) {
+            this._currentSlide++;
+            this._mrg += $(this._li).outerWidth(true);
 
-                $(sliderList).css({
-                    'margin-left': '-' + mrg + 'px'
-                });
+            $(this._sliderList).css({
+                'margin-left': '-' + this._mrg + 'px'
+            });
 
-            } else {
-                currentSlide = 0;
-                mrg = 0;
-                $(sliderList).css({
-                    'margin-left': mrg + 'px'
-                });
-            }
+        } else {
+            this._currentSlide = 0;
+            this._mrg = 0;
+            $(this._sliderList).css({
+                'margin-left': this._mrg + 'px'
+            });
         }
+    }
 
         //move ul with margin-left
-        function prev() {
-            if (currentSlide != 0) {
-                currentSlide--;
-                mrg -= $(li).outerWidth(true);
-                $(sliderList).css({
-                    'margin-left': '-' + mrg + 'px'
-                });
-            } else {
-                currentSlide = imgCollection.length - 3;
-                mrg = $(sliderList).width() - ($(li).outerWidth(true) * currentSlide);
-                $(sliderList).css({
-                    'margin-left': '-' + mrg + 'px'
-                });
-            }
+    Slider.prototype.prev = function() {
+        if (this._currentSlide != 0) {
+            this._currentSlide--;
+            this._mrg -= $(this._li).outerWidth(true);
+            $(this._sliderList).css({
+                'margin-left': '-' + this._mrg + 'px'
+            });
+        } else {
+            this._currentSlide = this.imgCollection.length - 3;
+            this._mrg = $(this._sliderList).width() - ($(this._li).outerWidth(true) * this._currentSlide);
+            $(this._sliderList).css({
+                'margin-left': '-' + this._mrg + 'px'
+            });
         }
+    }
 
         //changing class on li element with currentSlide element index
-        function toggleClass(parent,item,className) {
+    Slider.prototype.toggleClass = function (parent,item,className) {
             $(parent).find('.'+className).removeClass(className);
-            $(item).eq(currentSlide).addClass(className);
+            $(item).eq(this._currentSlide).addClass(className);
         }
 
-        //initialize getElem method
-        this.getElem = getElem;
-    }
+    //initialize getElem method
+    Slider.prototype.getElem();

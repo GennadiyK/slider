@@ -11,19 +11,18 @@
 <div class="slider-b"></div>
 <script src="js/slider.js"></script>
 <script>
-    var slider = new Slider({
-        elem: $('.slider-b'),
-        imgCollection: [
-            'i/i1.jpg',
-            'i/i2.jpg',
-            'i/i3.jpg',
-            'i/i1.jpg',
-            'i/i2.jpg',
-            'i/i3.jpg'
-        ]
-    });
-
-    slider.getElem();
+var slider = new Slider({
+elem: $('.slider-b'),
+imgCollection: [
+'i/i1.jpg',
+'i/i2.jpg',
+'i/i3.jpg',
+'i/i1.jpg',
+'i/i2.jpg',
+'i/i3.jpg'
+]
+});
+console.log(slider._mrg);
 </script>
 </body>
 </html>
