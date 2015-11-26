@@ -107,12 +107,15 @@
 
         //move ul with margin-left
     Slider.prototype.next = function() {
-        if (this._currentSlide < this.imgCollection.length) {
+        if (this._currentSlide < this.imgCollection.length-1) {
             this._currentSlide++;
-            this._mrg += $(this._li).outerWidth(true);
-            $(this._sliderList).css({
-                'margin-left': '-' + this._mrg + 'px'
-            });
+            
+            if(this._currentSlide%2 != 0) {
+                this._mrg += $(this._li).outerWidth(true);
+                $(this._sliderList).css({
+                    'margin-left': '-' + this._mrg + 'px'
+                });
+            }
 
         } else {
             this._currentSlide = 0;
@@ -127,13 +130,16 @@
     Slider.prototype.prev = function() {
         if (this._currentSlide != 0) {
             this._currentSlide--;
-            this._mrg -= $(this._li).outerWidth(true);
-            $(this._sliderList).css({
-                'margin-left': '-' + this._mrg + 'px'
-            });
+            if(this._currentSlide%2 == 0 ) {
+                this._mrg -= $(this._li).outerWidth(true);
+                $(this._sliderList).css({
+                    'margin-left': '-' + this._mrg + 'px'
+                });
+            }
         } else {
-            this._currentSlide = this.imgCollection.length - 3;
-            this._mrg = $(this._sliderList).width() - ($(this._li).outerWidth(true) * this._currentSlide);
+            this._currentSlide = this.imgCollection.length-1;
+            this._mrg = $(this._sliderList).width() - ($(this._li).outerWidth(true)*3);
+            console.log(this._mrg);
             $(this._sliderList).css({
                 'margin-left': '-' + this._mrg + 'px'
             });
