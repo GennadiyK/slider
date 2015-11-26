@@ -13,7 +13,6 @@
     Slider.prototype.getElem = function(){
         if(!this._slider) this.render();
         return this._slider;
-
     };
 
         //rendering slider-list(ul)
@@ -35,7 +34,6 @@
         this._sliderList = document.createElement('ul');
         this._sliderList.className = 'slider-list';
 
-        console.log(this);
         this.imgCollection.forEach(function(item){
             this._li = document.createElement('li');
             this._li.className = 'slider-list-item';
@@ -44,7 +42,7 @@
             $(this._li).append(this._img);
             $(this._sliderList).append(this._li);
 
-        });
+        },this);
 
         $(this._slider).append(this._sliderList);
         $(this.elem).append(this._slider);
@@ -83,9 +81,10 @@
 
         //delegation click event on control buttons and apply prevNext() function
     Slider.prototype.clickOnElement = function() {
+        var self = this;
         this.elem.on('click', function (e) {
-            this.prevNext(e);
-            this.toggleClass('.slider-list','.slider-list-item','current');
+            self.prevNext(e);
+            self.toggleClass('.slider-list','.slider-list-item','current');
         });
     }
 
@@ -108,10 +107,9 @@
 
         //move ul with margin-left
     Slider.prototype.next = function() {
-        if (this._currentSlide < this._imgCollection.length - 3) {
+        if (this._currentSlide < this.imgCollection.length) {
             this._currentSlide++;
             this._mrg += $(this._li).outerWidth(true);
-
             $(this._sliderList).css({
                 'margin-left': '-' + this._mrg + 'px'
             });
@@ -149,4 +147,4 @@
         }
 
     //initialize getElem method
-    Slider.prototype.getElem();
+
