@@ -81,12 +81,12 @@
 
         //delegation click event on control buttons and apply prevNext() function
     Slider.prototype.clickOnElement = function() {
-        var self = this;
+
         this.elem.on('click', function (e) {
-            self.prevNext(e);
-            self.toggleClass('.slider-list','.slider-list-item','current');
-        });
-    }
+            this.prevNext(e);
+            this.toggleClass('.slider-list','.slider-list-item','current');
+        }.bind(this));
+    };
 
 
         //checking event.target and if click was on prev button - run prev(); if click was on next - run next()
@@ -109,7 +109,7 @@
     Slider.prototype.next = function() {
         if (this._currentSlide < this.imgCollection.length-1) {
             this._currentSlide++;
-            
+
             if(this._currentSlide%2 != 0) {
                 this._mrg += $(this._li).outerWidth(true);
                 $(this._sliderList).css({
@@ -124,7 +124,7 @@
                 'margin-left': this._mrg + 'px'
             });
         }
-    }
+    };
 
         //move ul with margin-left
     Slider.prototype.prev = function() {
@@ -144,13 +144,13 @@
                 'margin-left': '-' + this._mrg + 'px'
             });
         }
-    }
+    };
 
         //changing class on li element with currentSlide element index
     Slider.prototype.toggleClass = function (parent,item,className) {
-            $(parent).find('.'+className).removeClass(className);
-            $(item).eq(this._currentSlide).addClass(className);
-        }
+        $(parent).find('.'+className).removeClass(className);
+        $(item).eq(this._currentSlide).addClass(className);
+    };
 
-    //initialize getElem method
+
 
