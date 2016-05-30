@@ -35,7 +35,7 @@
 
     Slider.prototype.generateListEl = function(collectionImg) {
         var listContainerEl = document.createElement('ul');
-            listContainerEl.classList.add('slider-list')
+            listContainerEl.classList.add('slider-list');
         var listContainerWrapper = document.createElement('div');
             listContainerWrapper.classList.add('slider-list-wrapper');
 
