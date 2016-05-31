@@ -24,6 +24,7 @@
     position: relative;
     float: left;
     border: 2px solid blue;
+    width: 20rem;
 }
 
 .slider-list-item:before {

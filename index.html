@@ -9,14 +9,27 @@
 </head>
 <body>
 
-<div class="slider-b" data-elem="slider" data-img="one" data-view="2"></div>
-<div class="slider-b" data-elem="slider" data-img="two"></div>
-<script src="js/imgCollections.js"></script>
+<div class="slider">
+    <img src="i/i1.jpg" alt="">
+    <img src="i/i2.jpg" alt="">
+    <img src="i/i3.jpg" alt="">
+    <img src="i/i4.jpg" alt="">
+</div>
 <script src="js/slider.js"></script>
 <script>
-var slider = new Slider();
 
-slider.render();
+  var slidersController = {
+      listObj: [],
+      init: function() {
+        var elems = document.querySelectorAll('.slider');
+          for(var i = 0; i < elems.length; i++) {
+            this.listObj.push(new Slider(elems[i]));
+          }
+    }
+  };
+  slidersController.init();
+  slidersController.listObj[0].render();
+  console.log(slidersController.listObj);
 </script>
 </body>
 </html>

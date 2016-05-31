@@ -1,88 +1,64 @@
-    function Slider() {
-        this.elem = document.querySelectorAll('[data-elem="slider"]');
-        this.imgCollection = [];
-        this.dataView = [];
+    function Slider(elem) {
+        this.elem = elem;
+        this.elemImgSrc = [];
     }
 
     Slider.prototype.init = function() {
-        this.getImgCollection();
-        this.getDataView();
+        this.getElemImgSrc();
+        this.deleteElemChildren();
     };
 
     Slider.prototype.render = function() {
         this.init();
-        for(var i=0; i<this.elem.length; i++) {
-            this.elem[i].appendChild(this.generateListEl(this.imgCollection[i]));
-        }
-
-        this.setSlideSize();
-        window.onresize = function() {
-            this.setSlideSize();
-        }.bind(this);
+        this.elem.appendChild(this.createContainer());
     };
 
-    Slider.prototype.getDataImg = function() {
-        var dataImg = [];
-        for(var i = 0; i < this.elem.length; i++) {
-            dataImg[i] = this.elem[i].dataset.img;
+    Slider.prototype.getElemImgSrc = function() {
+        var imgSrc = this.elem.querySelectorAll('img');
+        for(var i = 0; i < imgSrc.length; i++) {
+            this.elemImgSrc.push(imgSrc[i].src);
         }
-
-       return dataImg;
     };
 
-    Slider.prototype.getImgCollection = function() {
-        var dataImg = this.getDataImg();
-        for(var i =0; i < dataImg.length; i++) {
-            switch(dataImg[i]) {
-                case 'one':
-                    this.imgCollection[i] = imgCollection.one;
-                    break;
-                case 'two':
-                    this.imgCollection[i] = imgCollection.two;
-                    break;
+
+    Slider.prototype.deleteElemChildren = function() {
+        this.elem.innerHTML = '';
+    };
+
+    Slider.prototype.createItem = function(index) {
+        var li = document.createElement('li');
+            li.classList.add('slider-list-item');
+        var img = document.createElement('img');
+            img.classList.add('slider-list-img');
+
+        for(var i = 0; i < this.elemImgSrc.length; i++) {
+            if(i === index) {
+                img.src = this.elemImgSrc[i];
             }
         }
+
+        li.appendChild(img);
+
+        return li;
     };
 
-    Slider.prototype.generateListEl = function(collectionImg) {
-        var listContainerEl = document.createElement('ul');
-            listContainerEl.classList.add('slider-list');
-        var listContainerWrapper = document.createElement('div');
-            listContainerWrapper.classList.add('slider-list-wrapper');
+    Slider.prototype.createList = function() {
+        var ul = document.createElement('ul');
+            ul.classList.add('slider-list');
 
-        for(var i = 0; i < collectionImg.length; i++) {
-            var liEl = document.createElement('li');
-                liEl.classList.add('slider-list-item');
-            var image = document.createElement('img');
-                image.src = collectionImg[i];
-                image.classList.add('slider-list-img');
-                liEl.appendChild(image);
-
-
-            listContainerEl.appendChild(liEl);
-            listContainerWrapper.appendChild(listContainerEl);
+        for(var i = 0; i < this.elemImgSrc.length; i++ ) {
+            ul.appendChild(this.createItem(i));
         }
 
-        return listContainerWrapper;
+        return ul;
     };
 
-    Slider.prototype.getDataView = function() {
-      for(var i = 0; i < this.elem.length; i++) {
-          this.dataView[i] = this.elem[i].dataset.view;
-      }
-    };
+    Slider.prototype.createContainer = function() {
+        var container = document.createElement('div');
+            container.classList.add('slider-list-wrapper');
 
-    Slider.prototype.setSlideSize = function() {
-        var liOffsetWidth, liOffsetHeight;
-        for(var i = 0; i < this.elem.length; i++) {
-            for(var x = 0; x < this.elem[i].querySelectorAll('.slider-list-item').length; x++) {
-                this.elem[i].querySelectorAll('li')[x].style.width = 100 / this.dataView[i] + '%';
-            }
-            liOffsetWidth = this.elem[i].querySelector('.slider-list-item').offsetWidth;
-            liOffsetHeight = this.elem[i].querySelector('.slider-list-item').offsetHeight;
+            container.appendChild(this.createList());
 
-            console.log(liOffsetHeight);
-            this.elem[i].querySelector('.slider-list-wrapper').style.height = liOffsetHeight + 'px';
-        }
+        return container;
     };
 
