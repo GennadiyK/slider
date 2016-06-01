@@ -4,12 +4,15 @@
 
 .slider-list-wrapper {
     overflow: hidden;
+    width: 640px;
 }
 
 .slider-list {
     list-style-type:none;
     margin: 0;
     padding: 0;
+    transition: all 0.5s ease;
+
 }
 
 .slider-list:after {
