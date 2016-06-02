@@ -3,6 +3,7 @@
         this.elemImgSrc = [];
         this.elemList = null;
         this.elemListItem = null;
+        this.controls = {};
         this.slideWidth = null;
         this.listWidth = null;
         this.marginLeft = 0;
@@ -17,6 +18,7 @@
     Slider.prototype.render = function() {
         this.init();
         this.elem.appendChild(this.createContainer());
+        console.log(this.createControl());
         this.getSlideWidth();
         this.getListWidth();
         this.setListWidth();
@@ -60,6 +62,15 @@
         }
 
         return this.elemList;
+    };
+
+    Slider.prototype.createControl = function() {
+        this.controls.prev = document.createElement('button');
+        this.controls.next = document.createElement('button');
+        this.controls.prev.classList.add('slider-control-prev');
+        this.controls.next.classList.add('slider-control-next');
+
+        return this.controls;
     };
 
     Slider.prototype.createContainer = function() {
