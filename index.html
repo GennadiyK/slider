@@ -15,21 +15,34 @@
     <img src="i/i3.jpg" alt="">
     <img src="i/i4.jpg" alt="">
 </div>
+<div class="slider">
+    <img src="i/i1.jpg" alt="">
+    <img src="i/i2.jpg" alt="">
+    <img src="i/i3.jpg" alt="">
+    <img src="i/i4.jpg" alt="">
+</div>
+<div class="slider">
+    <img src="i/i1.jpg" alt="">
+    <img src="i/i2.jpg" alt="">
+    <img src="i/i3.jpg" alt="">
+    <img src="i/i4.jpg" alt="">
+</div>
+
 <script src="js/slider.js"></script>
 <script>
 
   var slidersController = {
       listObj: [],
       init: function() {
-        var elems = document.querySelectorAll('.slider');
+          var elems = document.querySelectorAll('.slider');
+
           for(var i = 0; i < elems.length; i++) {
-            this.listObj.push(new Slider(elems[i]));
+              this.listObj.push(new Slider(elems[i]));
+              this.listObj[i].render();
           }
     }
   };
   slidersController.init();
-  slidersController.listObj[0].render();
-  console.log(slidersController.listObj);
 </script>
 </body>
 </html>
