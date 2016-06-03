@@ -3,10 +3,13 @@
         this.elemImgSrc = [];
         this.elemList = null;
         this.elemListItem = null;
-        this.controls = {};
+        this.sliderControls = true;
         this.slideWidth = null;
         this.listWidth = null;
         this.marginLeft = 0;
+        this.countSlide = 0;
+        this.buttonPrev = null;
+        this.buttonNext = null;
 
     }
 
@@ -18,11 +21,16 @@
     Slider.prototype.render = function() {
         this.init();
         this.elem.appendChild(this.createContainer());
-        console.log(this.createControl());
         this.getSlideWidth();
         this.getListWidth();
         this.setListWidth();
-        setInterval(function(){this.nextSlide();}.bind(this), 1000);
+
+        if(this.sliderControls) {
+            this.showControls(this.elem);
+            this.prevNextSliding();
+        }
+
+
     };
 
     Slider.prototype.getElemImgSrc = function() {
@@ -64,13 +72,21 @@
         return this.elemList;
     };
 
-    Slider.prototype.createControl = function() {
-        this.controls.prev = document.createElement('button');
-        this.controls.next = document.createElement('button');
-        this.controls.prev.classList.add('slider-control-prev');
-        this.controls.next.classList.add('slider-control-next');
+    Slider.prototype.createControl = function(controlName) {
+        this.controlName = document.createElement('button');
 
-        return this.controls;
+        this.controlName.classList.add('slider-control-' + controlName);
+        this.controlName.innerHTML = controlName;
+        return this.controlName;
+    };
+
+    Slider.prototype.showControls = function(elem) {
+        this.buttonPrev = this.createControl('prev');
+        this.buttonNext = this.createControl('next');
+
+        elem.appendChild( this.buttonPrev );
+        elem.appendChild( this.buttonNext );
+
     };
 
     Slider.prototype.createContainer = function() {
@@ -99,11 +115,30 @@
     };
 
     Slider.prototype.nextSlide = function() {
-        this.marginLeft += this.slideWidth;
-        this.elemList.style.marginLeft = -this.marginLeft + 'px';
+        if(this.countSlide < this.elemImgSrc.length - 1) {
+            this.marginLeft -= this.slideWidth;
+            this.elemList.style.marginLeft = this.marginLeft + 'px';
+            this.countSlide++;
+        }
+
     };
 
     Slider.prototype.prevSlide = function() {
-        this.marginLeft += this.slideWidth;
-        this.elemList.style.marginLeft = this.marginLeft + 'px';
+        if(this.countSlide > 0) {
+            this.marginLeft += this.slideWidth;
+            this.elemList.style.marginLeft = this.marginLeft + 'px';
+            this.countSlide--;
+            console.log(this.countSlide);
+        }
+    };
+
+    Slider.prototype.prevNextSliding = function() {
+            this.buttonNext.addEventListener('click', function () {
+                this.nextSlide();
+            }.bind(this));
+
+            this.buttonPrev.addEventListener('click', function(){
+                this.prevSlide();
+            }.bind(this));
+
     };
