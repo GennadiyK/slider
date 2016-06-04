@@ -6,8 +6,9 @@
         this.sliderControls = true;
         this.slideWidth = null;
         this.listWidth = null;
-        this.marginLeft = 0;
+        this.marginLeft = null;
         this.currentSlide = 0;
+        this.clonedSlideLenght = 2;
         this.buttonPrev = null;
         this.buttonNext = null;
         this.removedItem = null;
@@ -21,6 +22,8 @@
     Slider.prototype.render = function() {
         this.init();
         this.elem.appendChild(this.createContainer());
+        this.elemList.insertBefore(this.clonedLastItem(), this.elemList.childNodes[0]);
+        this.elemList.appendChild(this.clonedFirstItem());
         this.getSlideWidth();
         this.getListWidth();
         this.setListWidth();
@@ -105,7 +108,7 @@
     };
 
     Slider.prototype.getListWidth = function() {
-        this.listWidth =  this.slideWidth * this.elemImgSrc.length;
+        this.listWidth =  this.slideWidth * (this.elemImgSrc.length + this.clonedSlideLenght);
 
         return this.listWidth;
     };
@@ -115,9 +118,9 @@
     };
 
     Slider.prototype.nextSlide = function() {
-        this.removeItem(this.currentSlide);
-        this.appendItem(this.removedItem);
-        //if(this.currentSlide < this.elemImgSrc.length - 1) {
+        // this.removeItem(this.currentSlide);
+        // this.appendItem(this.removedItem);
+        // if(this.currentSlide < this.elemImgSrc.length - 1) {
             this.marginLeft -= this.slideWidth;
             this.elemList.style.marginLeft = this.marginLeft + 'px';
             this.currentSlide++;
@@ -126,11 +129,11 @@
     };
 
     Slider.prototype.prevSlide = function() {
-        if(this.currentSlide > 0) {
+        // if(this.currentSlide > 0) {
             this.marginLeft += this.slideWidth;
             this.elemList.style.marginLeft = this.marginLeft + 'px';
             this.currentSlide--;
-        }
+        // }
     };
 
     Slider.prototype.prevNextSliding = function() {
@@ -152,4 +155,12 @@
 
     Slider.prototype.appendItem = function(item) {
         this.elemList.appendChild(item);
+    };
+
+    Slider.prototype.clonedFirstItem = function() {
+        return this.createItem(0);
+    };
+
+    Slider.prototype.clonedLastItem = function() {
+        return this.createItem(this.elemImgSrc.length - 1);
     };
