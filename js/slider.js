@@ -6,7 +6,7 @@
         this.sliderControls = true;
         this.slideWidth = null;
         this.listWidth = null;
-        this.marginLeft = null;
+        this.marginLeft = 0;
         this.currentSlide = 0;
         this.clonedSlideLenght = 2;
         this.buttonPrev = null;
@@ -22,9 +22,11 @@
     Slider.prototype.render = function() {
         this.init();
         this.elem.appendChild(this.createContainer());
+        this.addCurrentClass(0, 'current');
         this.elemList.insertBefore(this.clonedLastItem(), this.elemList.childNodes[0]);
         this.elemList.appendChild(this.clonedFirstItem());
         this.getSlideWidth();
+        this.setDefaultMarginLeft();
         this.getListWidth();
         this.setListWidth();
 
@@ -56,6 +58,7 @@
         for(var i = 0; i < this.elemImgSrc.length; i++) {
             if(i === index) {
                 img.src = this.elemImgSrc[i];
+                this.elemListItem.dataset.index = i;
             }
         }
 
@@ -117,14 +120,24 @@
         this.elemList.style.width = this.listWidth + 'px';
     };
 
+
+    Slider.prototype.setDefaultMarginLeft = function() {
+        this.marginLeft -=  this.slideWidth;
+        this.elemList.style.marginLeft = this.marginLeft + 'px';
+    };
+
+
+
     Slider.prototype.nextSlide = function() {
         // this.removeItem(this.currentSlide);
         // this.appendItem(this.removedItem);
         // if(this.currentSlide < this.elemImgSrc.length - 1) {
             this.marginLeft -= this.slideWidth;
             this.elemList.style.marginLeft = this.marginLeft + 'px';
+            this.removeCurrentClass('current');
             this.currentSlide++;
-       // }
+            this.addCurrentClass(this.currentSlide + 1, 'current');
+        // }
 
     };
 
@@ -132,8 +145,21 @@
         // if(this.currentSlide > 0) {
             this.marginLeft += this.slideWidth;
             this.elemList.style.marginLeft = this.marginLeft + 'px';
-            this.currentSlide--;
+            this.removeCurrentClass('current');
+        this.addCurrentClass(this.currentSlide, 'current');
+        this.currentSlide--;
         // }
+    };
+
+    Slider.prototype.addCurrentClass = function(currentSlide, currentClass) {
+        this.elemList.querySelectorAll('.slider-list-item')[currentSlide].classList.add(currentClass);
+    };
+
+    Slider.prototype.removeCurrentClass = function( currentClass) {
+        var items = this.elemList.querySelectorAll('.slider-list-item');
+        for(var i = 0; i < items.length; i++) {
+            items[i].classList.remove(currentClass);
+        }
     };
 
     Slider.prototype.prevNextSliding = function() {
