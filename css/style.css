@@ -4,15 +4,13 @@
 
 .slider-list-wrapper {
     overflow: hidden;
-    width: 640px;
+    width: 320px;
 }
 
 .slider-list {
     list-style-type:none;
     margin: 0;
     padding: 0;
-    transition: all 0.5s ease;
-
 }
 
 .slider-list:after {
@@ -28,6 +26,8 @@
     float: left;
     border: 2px solid blue;
     width: 20rem;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 .slider-list-item:before {
