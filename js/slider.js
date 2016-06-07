@@ -12,6 +12,7 @@
         this.clonedSlideLength = null;
         this.buttonPrev = null;
         this.buttonNext = null;
+        this.animationDuration = 300;
     }
 
     Slider.prototype.init = function() {
@@ -30,6 +31,8 @@
         this.setDefaultMarginLeft();
         this.getListWidth();
         this.setListWidth();
+
+
 
         if(this.sliderControls) {
             this.showControls(this.elem);
@@ -127,29 +130,34 @@
         this.elemList.style.marginLeft ="-" + defaultMrg + 'px';
     };
 
-
+    Slider.prototype.animateSlider = function(animation) {
+        if(animation === true) {
+            this.elemList.style.transition = 'all ' + this.animationDuration + 'ms ease-out';
+        } else {
+            this.elemList.style.transition = 'all 0ms ease-out';
+        }
+    };
 
     Slider.prototype.nextSlide = function() {
 
-         this.removeCurrentClass('current');
-         if(this.currentSlide < this.elemImgSrc.length) {
-             this.movingSliderLeft();
-         }
+        this.removeCurrentClass('current');
+        this.animateSlider(true);
 
-         if(this.currentSlide < this.elemImgSrc.length) {
+        if(this.currentSlide < this.elemImgSrc.length) {
              this.currentSlide++;
+             this.movingSliderLeft();
              this.addCurrentClass(this.currentSlide + 1, 'current');
 
              if(this.currentSlide === 4){
-                 this.setDefaultMarginLeft();
-                 this.currentSlide = 0;
-                 this.removeCurrentClass('current');
-                 this.addCurrentClass(this.currentSlide + 1, 'current');
+                 setTimeout(function(){
+                     this.setDefaultMarginLeft();
+                     this.animateSlider(false);
+                     this.currentSlide = 0;
+                     this.removeCurrentClass('current');
+                     this.addCurrentClass(this.currentSlide + 1, 'current');
+                 }.bind(this), this.animationDuration);
              }
-
          }
-        console.log(this.currentSlide );
-
     };
 
     Slider.prototype.movingSliderLeft = function() {
