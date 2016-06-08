@@ -16,7 +16,7 @@
     }
 
     Slider.prototype.init = function() {
-        this.getElemImgSrc();
+        this.setElemImgSrc();
         this.deleteElemChildren();
     };
 
@@ -29,7 +29,7 @@
         this.setClonedSlideLength();
         this.getSlideWidth();
         this.setDefaultMarginLeft(this.slideWidth);
-        this.getListWidth();
+        this.setListWidth();
         this.setListWidth();
 
 
@@ -40,7 +40,7 @@
         }
     };
 
-    Slider.prototype.getElemImgSrc = function() {
+    Slider.prototype.setElemImgSrc = function() {
         var imgSrc = this.elem.querySelectorAll('img');
         for(var i = 0; i < imgSrc.length; i++) {
             this.elemImgSrc.push(imgSrc[i].src);
@@ -65,8 +65,6 @@
         }
 
         this.elemListItem.appendChild(img);
-
-
 
         return this.elemListItem;
     };
@@ -112,7 +110,7 @@
         return this.slideWidth;
     };
 
-    Slider.prototype.getListWidth = function() {
+    Slider.prototype.setListWidth = function() {
         this.listWidth =  this.slideWidth * (this.elemImgSrc.length + this.clonedSlideLength);
 
         return this.listWidth;
