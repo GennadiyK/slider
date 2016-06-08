@@ -29,7 +29,7 @@
         this.setClonedSlideLength();
         this.getSlideWidth();
         this.setDefaultMarginLeft(this.slideWidth);
-        this.setListWidth();
+        this.getListWidth();
         this.setListWidth();
 
 
@@ -110,7 +110,7 @@
         return this.slideWidth;
     };
 
-    Slider.prototype.setListWidth = function() {
+    Slider.prototype.getListWidth = function() {
         this.listWidth =  this.slideWidth * (this.elemImgSrc.length + this.clonedSlideLength);
 
         return this.listWidth;
@@ -159,7 +159,9 @@
              if(this.currentSlide === this.elemImgSrc.length){
                  setTimeout(function(){
                      this.setDefaultMarginLeft(this.slideWidth);
+
                      this.animateSlider(false);
+
                      this.currentSlide = 0;
                      this.removeCurrentClass('current');
                      this.addCurrentClass(this.currentSlide + 1, 'current');
