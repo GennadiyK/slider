@@ -127,12 +127,21 @@
         this.elemList.style.marginLeft ="-" + defaultMrg + 'px';
     };
 
-    Slider.prototype.animateSlider = function(animation) {
-        if(animation === true) {
-            this.elemList.style.transition = 'all ' + this.animationDuration + 'ms ease-out';
-        } else {
-            this.elemList.style.transition = 'all 0ms ease-out';
+    Slider.prototype.animateSlider = function(el, prop, start, finish, dur, callback) {
+        var t1 = new Date().getTime();
+        function frame(){
+            var t = (new Date().getTime() - t1) / dur;
+            var currentDistance = (finish - start) * t;
+            el.style[prop] = currentDistance  + 'px'; // длина отрезка / количество шагов = длина одного шага
+
+
+            if(currentDistance < finish) {
+                setTimeout(frame,30);
+
+            }
+
         }
+        frame();
     };
 
     Slider.prototype.movingSliderLeft = function() {
@@ -149,18 +158,19 @@
 
         this.removeCurrentClass('current');
 
-        this.animateSlider(true);
+
 
         if(this.currentSlide < this.elemImgSrc.length) {
              this.currentSlide++;
-             this.movingSliderLeft();
+             //this.movingSliderLeft();
+            this.animateSlider(this.elemList, 'margin-left', 320, -620, 3000);
             this.addCurrentClass(this.currentSlide + 1, 'current');
 
              if(this.currentSlide === this.elemImgSrc.length){
                  setTimeout(function(){
                      this.setDefaultMarginLeft(this.slideWidth);
 
-                     this.animateSlider(false);
+
 
                      this.currentSlide = 0;
                      this.removeCurrentClass('current');
