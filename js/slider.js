@@ -13,6 +13,8 @@
         this.buttonPrev = null;
         this.buttonNext = null;
         this.animationDuration = 300;
+        this.timePassed = 0;
+        this.dir = 0;
     }
 
     Slider.prototype.init = function() {
@@ -31,7 +33,6 @@
         this.setDefaultMarginLeft(this.slideWidth);
         this.getListWidth();
         this.setListWidth();
-
 
 
         if(this.sliderControls) {
@@ -122,55 +123,50 @@
 
 
     Slider.prototype.setDefaultMarginLeft = function(val) {
-        var defaultMrg = val;
+        this.dir = -1;
+        var defaultMrg = val * this.dir;
         this.marginLeft = defaultMrg;
-        this.elemList.style.marginLeft ="-" + defaultMrg + 'px';
+        this.elemList.style.marginLeft = defaultMrg + 'px';
     };
 
-    Slider.prototype.animateSlider = function(el, prop, start, finish, dur, callback) {
-        var t1 = new Date().getTime();
-        function frame(){
-            var t = (new Date().getTime() - t1) / dur;
-            var currentDistance = (finish - start) * t;
-            el.style[prop] = currentDistance  + 'px'; // длина отрезка / количество шагов = длина одного шага
 
+    Slider.prototype.animateSlider = function(elem, prop, start, finish, duration) {
+        var startTime = Date.now();
+        var path = finish - start;
 
-            if(currentDistance < finish) {
-                setTimeout(frame,30);
+        var timer = setInterval(function() {
+            var t = (Date.now() - startTime) / duration;
 
+            if(t >= 1) {
+                this.timePassed = finish;
+                clearInterval(timer);
+            } else {
+                this.timePassed = start +(t * path);
             }
 
-        }
-        frame();
+            elem.style[prop] = this.timePassed + 'px';
+
+
+        }.bind(this),5);
     };
 
-    Slider.prototype.movingSliderLeft = function() {
-        this.marginLeft += this.slideWidth;
-        this.elemList.style.marginLeft = "-" + this.marginLeft + 'px';
-    };
-
-    Slider.prototype.movingSliderRight = function() {
-        this.marginLeft -= this.slideWidth;
-        this.elemList.style.marginLeft = "-" + this.marginLeft + 'px';
-    };
 
     Slider.prototype.nextSlide = function() {
 
+        this.dir = -1;
         this.removeCurrentClass('current');
-
 
 
         if(this.currentSlide < this.elemImgSrc.length) {
              this.currentSlide++;
-             //this.movingSliderLeft();
-            this.animateSlider(this.elemList, 'margin-left', 320, -620, 3000);
+
+            this.animateSlider(this.elemList, 'margin-left', this.marginLeft, this.marginLeft+= this.slideWidth * this.dir, 100);
+
             this.addCurrentClass(this.currentSlide + 1, 'current');
 
              if(this.currentSlide === this.elemImgSrc.length){
                  setTimeout(function(){
                      this.setDefaultMarginLeft(this.slideWidth);
-
-
 
                      this.currentSlide = 0;
                      this.removeCurrentClass('current');
@@ -185,10 +181,10 @@
     Slider.prototype.prevSlide = function() {
         this.removeCurrentClass('current');
         this.animateSlider(true);
-
+        this.dir = 1;
         if(this.currentSlide >= 0) {
             this.currentSlide--;
-            this.movingSliderRight();
+            this.animateSlider(this.elemList, 'margin-left', this.marginLeft, this.marginLeft+= this.slideWidth * this.dir, 100);
             this.addCurrentClass(this.currentSlide + 1, 'current');
         }
 
