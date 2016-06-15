@@ -143,9 +143,7 @@
             } else {
                 this.timePassed = start +(t * path);
             }
-
             elem.style[prop] = this.timePassed + 'px';
-
 
         }.bind(this),5);
     };
@@ -160,7 +158,7 @@
         if(this.currentSlide < this.elemImgSrc.length) {
              this.currentSlide++;
 
-            this.animateSlider(this.elemList, 'margin-left', this.marginLeft, this.marginLeft+= this.slideWidth * this.dir, 100);
+            this.animateSlider(this.elemList, 'margin-left', this.marginLeft, this.marginLeft+= (this.slideWidth * this.dir), this.animationDuration);
 
             this.addCurrentClass(this.currentSlide + 1, 'current');
 
@@ -176,22 +174,18 @@
          }
     };
 
-
-
     Slider.prototype.prevSlide = function() {
         this.removeCurrentClass('current');
-        this.animateSlider(true);
         this.dir = 1;
         if(this.currentSlide >= 0) {
             this.currentSlide--;
-            this.animateSlider(this.elemList, 'margin-left', this.marginLeft, this.marginLeft+= this.slideWidth * this.dir, 100);
+            this.animateSlider(this.elemList, 'margin-left', this.marginLeft, this.marginLeft+= (this.slideWidth * this.dir), this.animationDuration);
             this.addCurrentClass(this.currentSlide + 1, 'current');
         }
 
         if(this.currentSlide < 0 ){
             setTimeout(function(){
                 this.setDefaultMarginLeft(this.slideWidth * this.elemImgSrc.length);
-                this.animateSlider(false);
                 this.currentSlide = this.elemImgSrc.length - 1;
                 this.removeCurrentClass('current');
                 this.addCurrentClass(this.currentSlide + 1, 'current');
